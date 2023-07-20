@@ -128,7 +128,7 @@ const Contact = () => {
               className="bg-tertiary py-4 px-6 placeholde:text-secondary text-white rounded-lg outlined-none border-none font-medium"
             />
           </label>
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-4">
             <button
               type="submit"
               className="bg-tertiary py-3 px-8 outlined-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl"
@@ -139,7 +139,7 @@ const Contact = () => {
               className="bg-tertiary py-3 px-8 outlined-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl"
               type="button"
             >
-            Download Resume
+            Resume
             </button>
           </div>
         </form>
