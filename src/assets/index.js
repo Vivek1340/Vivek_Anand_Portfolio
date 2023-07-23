@@ -40,6 +40,8 @@ import iit from  "./IIT.png"
 import resume from "./Resume_Vivek_Anand_SDE.pdf"
 import download from "./download.png"
 
+import desk from "./desk1.jpg"
+
 export {
   logo,
   backend,
@@ -77,6 +79,7 @@ export {
   ntse,
   iit,
   resume,
-  download
+  download,
+  desk
   
 };
