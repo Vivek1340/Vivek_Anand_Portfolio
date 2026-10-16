@@ -1,97 +1,63 @@
-import { Tilt } from "react-tilt";
 import { motion } from "framer-motion";
 
-import { styles } from "../styles";
-import { github } from "../assets";
+import { caseStudies } from "../constants";
+import { fadeIn } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
-import { projects } from "../constants";
-import { fadeIn, textVariant } from "../utils/motion";
+import SectionHeading from "./SectionHeading";
 
-const ProjectCard = ({
-  index,
-  name,
-  description,
-  tags,
-  image,
-  source_code_link,
-}) => {
-  return (
-    <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
-      <Tilt
-        options={{
-          max: 45,
-          scale: 1,
-          speed: 450,
-        }}
-        className="bg-tertiary p-5 rounded-2xl sm:w-[350px] w-full"
-      >
-        <div className="relative w-full h-[230px]">
-          <img
-            src={image}
-            alt={name}
-            className="w-full h-full object-cover rounded-2xl"
-          />
-          <div className="absolute inset-0 flex justify-end m-3 card-img_hover">
-            <div
-              onClick={() => window.open(source_code_link, "_blank")}
-              className="black-gradient w-10 h-10 rounded-full flex justify-center items-center cursor-pointer"
-            >
-              <img
-                src={github}
-                alt="github"
-                className="w-1/2 h-1/2 object-contain"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-5">
-          <h3 className="text-white font-bold text-[24px]">{name}</h3>
-          <p className="mt-2 text-secondary text-[14px]"> {description} </p>
-        </div>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-        {tags.map((tag,index) => (
-          <p
-            key={tags.name}
-            className={`text-[14px] ${tag.color} `}
-          >
-            #{tag.name}
-          </p>
-        ))}
-        </div>
-      </Tilt>
-    </motion.div>
-  );
+const domainColor = {
+  Fintech: "text-amber border-amber/30",
+  Platform: "text-teal border-teal/30",
+  Reliability: "text-[#7DD3FC] border-[#7DD3FC]/30",
+  "Developer productivity": "text-[#C4B5FD] border-[#C4B5FD]/30",
 };
+
+const CaseStudy = ({ index, title, domain, problem, did, tags }) => (
+  <motion.article
+    variants={fadeIn("up", "spring", index * 0.12, 0.75)}
+    className="card rounded-2xl p-6 sm:p-7 flex flex-col"
+  >
+    <div className="flex items-center justify-between gap-3">
+      <span className={`font-mono text-[11px] uppercase tracking-wider border rounded-full px-2.5 py-1 ${domainColor[domain]}`}>
+        {domain}
+      </span>
+      <span className="font-mono text-[12px] text-line">{String(index + 1).padStart(2, "0")}</span>
+    </div>
+    <h3 className="mt-5 font-display text-ink text-[22px] font-semibold leading-snug">{title}</h3>
+    <p className="mt-4 text-[14px] leading-relaxed text-secondary">
+      <span className="font-mono text-[11px] uppercase tracking-wider text-secondary/70 block mb-1">Problem</span>
+      {problem}
+    </p>
+    <p className="mt-4 text-[14px] leading-relaxed text-ink/90">
+      <span className="font-mono text-[11px] uppercase tracking-wider text-teal block mb-1">What I did</span>
+      {did}
+    </p>
+    <div className="mt-auto pt-5 flex flex-wrap gap-2">
+      {tags.map((t) => (
+        <span key={t} className="font-mono text-[12px] text-secondary bg-primary/60 rounded-md px-2 py-1">
+          {t}
+        </span>
+      ))}
+    </div>
+  </motion.article>
+);
 
 const Works = () => {
   return (
     <>
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>My work</p>
-        <h2 className={styles.sectionHeadText}>Projects.</h2>
-      </motion.div>
-      <div className="full flex">
-        <motion.p
-          variants={fadeIn("", "", 0.1, 1)}
-          className="mt-3 text-secondary text-[17px] max-w-3xl leading-[30px]"
-        >
-          Following projects showcases my skills and experience though
-          real-world examples of my work. Each project is briefly described with
-          links to code repositories. Some Projects also have live demo links in
-          it. It reflects my abilities to solve complex problems, work with
-          different technologies and learn quickly.
-        </motion.p>
-      </div>
+      <SectionHeading index="02" label="work" title="Selected work at FarMart." />
+      <motion.p variants={fadeIn("", "", 0.1, 1)} className="mt-5 text-secondary text-[17px] max-w-2xl leading-[1.8]">
+        Systems I designed or owned end to end — from the design doc to production.
+      </motion.p>
 
-      <div className="mt-20 flex flex-wrap gap-7">
-        {projects.map((project, index) => (
-          <ProjectCard key={`project-${index}`} index={index} {...project} />
+      <div className="mt-12 grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+        {caseStudies.map((cs, i) => (
+          <CaseStudy key={cs.title} index={i} {...cs} />
         ))}
       </div>
+
     </>
   );
 };
 
-export default SectionWrapper(Works, "");
+export default SectionWrapper(Works, "work");

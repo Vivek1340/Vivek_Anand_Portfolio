@@ -1,23 +1,24 @@
-import React from 'react'
+import { profile } from "../constants";
 
 const Footer = () => {
   return (
-    <div className='max-w-7xl mx-auto relative z-0 sm:px-10 px-6 sm:py-10 py-6'>
-    <div className='flex w-full justify-between flex-col md:flex-row'>
-      <div>
-        <h2 className='text-white font-bold mb-4'>Contacts</h2>
-        <p className='text-secondary'>vivekanand1340@gmail.com</p>
-        <p className='text-secondary'>7970956724</p>
+    <footer className="border-t border-line">
+      <div className="max-w-7xl mx-auto sm:px-16 px-5 py-8 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+        <p className="font-mono text-[13px] text-secondary">© {new Date().getFullYear()} {profile.name}</p>
+        <div className="flex gap-6 text-[15px]">
+          <a href={profile.linkedin} target="_blank" rel="noreferrer" className="text-secondary hover:text-teal transition-colors">
+            LinkedIn
+          </a>
+          <a href={profile.github} target="_blank" rel="noreferrer" className="text-secondary hover:text-teal transition-colors">
+            GitHub
+          </a>
+          <a href={`mailto:${profile.email}`} className="text-secondary hover:text-teal transition-colors">
+            Email
+          </a>
+        </div>
       </div>
-      <div className='flex w-full md:w-[150px] justify-between my-4 md:my-0'>
+    </footer>
+  );
+};
 
-        <a href='https://www.linkedin.com/in/vivek-anand-aab0b9189/'>Linkedin</a>
-        <a href="https://github.com/vivek1340/">Github</a>
-      </div>
-    </div>
-    <p className='w-full text-center'>copyright © 2023</p>
-    </div>
-  )
-}
-
-export default Footer
+export default Footer;

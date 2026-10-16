@@ -1,50 +1,30 @@
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 
-import { styles } from "../styles"
-import { SectionWrapper } from "../hoc"
-import { fadeIn,textVariant } from "../utils/motion"
-import { achievements } from "../constants"
+import { achievements } from "../constants";
+import { imo, ntse, iit } from "../assets";
+import { fadeIn } from "../utils/motion";
+import { SectionWrapper } from "../hoc";
+import SectionHeading from "./SectionHeading";
 
-const AchievementCard = ({index,
-  organisation,
-  rank,
-  image}
-  ) => {
-  return (
-    <motion.div
-      variants={fadeIn("", "spring", index* 0.5, 0.75)}
-      className="bg-black-200 p-10 rounded-3xl xs:w-[320px] w-full"
-    >
-    <p className="text-white tracking-wider text-[18px]" >{organisation}</p>
-    <img src={image} alt={`image of ${organisation}`} className="mt-7 w-96 h-48 rounded-[5px] object-contain" />
-    <p className="mt-3 text-secondary text-[12px] peach-text-gradient" >{rank}</p>
-    </motion.div>
-  )
-}
+const images = [imo, ntse, iit];
 
 const Achievements = () => {
   return (
-    <div className="mt-12 bg-black-100 rounded-[20px]" >
-       <div className={`${styles.padding} bg-tertiary rounded-2xl min-h-[300px]`}>
-         <motion.div
-          variants={textVariant()}
-         >
-           <p className={styles.sectionSubText}>NOTEWORTHY ACCOMPLISHMENTS</p>
-           <h2 className= {styles.sectionHeadText}>Achievments.</h2>
-         </motion.div>
-       </div>
-       <div className={`${styles.paddingX} -mt-20 pb-14 flex flex-wrap gap-7`}>
-        {
-          achievements.map((achievement, index) => (
-            <AchievementCard key={achievement.organisation} index={index} {...achievement} />
-          ))
+    <>
+      <SectionHeading index="05" label="before code" title="Achievements." />
+      <div className="mt-12 grid sm:grid-cols-3 gap-5">
+        {achievements.map((a, i) => (
+          <motion.div key={a.title} variants={fadeIn("up", "spring", i * 0.15, 0.75)} className="card rounded-2xl p-6">
+            <div className="h-36 rounded-xl bg-white/95 flex items-center justify-center overflow-hidden">
+              <img src={images[i]} alt="" className="max-h-28 max-w-[80%] object-contain" />
+            </div>
+            <p className="mt-5 font-display text-ink text-[18px] font-semibold leading-snug">{a.title}</p>
+            <p className="mt-1 font-mono text-[13px] text-amber">{a.detail}</p>
+          </motion.div>
+        ))}
+      </div>
+    </>
+  );
+};
 
-        }
-       </div>
-       
-     </div>
-   
-  )
-}
-
-export default SectionWrapper(Achievements, "")
+export default SectionWrapper(Achievements, "");

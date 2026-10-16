@@ -1,50 +1,26 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
 
-import { styles } from "../styles";
-import { EarthCanvas } from "./canvas";
-import { SectionWrapper } from "../hoc";
-import { slideIn } from "../utils/motion";
+import { profile } from "../constants";
 import { resume } from "../assets";
+import { slideIn } from "../utils/motion";
+import { SectionWrapper } from "../hoc";
+import { EarthCanvas } from "./canvas";
+import SectionHeading from "./SectionHeading";
 
-// MfzoX5pROUzEe30kr
-// template_s08st24
-// service_0z6c9rm
+const inputClass =
+  "bg-primary/70 border border-line focus:border-teal focus:outline-none py-3.5 px-5 placeholder:text-secondary/60 text-ink rounded-xl transition-colors";
 
 const Contact = () => {
-  const formRef = useRef();
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState("idle");
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const [loading, setLoading] = useState(false);
-
-  const handleDownloadPDF = () => {
-    
-    const pdfFile = resume;
-    const link = document.createElement("a");
-    link.href = pdfFile;
-    link.setAttribute("download", "Resume_Vivek_Anand.pdf");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
+    setStatus("sending");
     emailjs
       .send(
         "service_0z6c9rm",
@@ -53,102 +29,68 @@ const Contact = () => {
           from_name: form.name,
           to_name: "Vivek",
           from_email: form.email,
-          to_email: "vivekanand1340@gmail.com",
+          to_email: profile.email,
           message: form.message,
         },
         "MfzoX5pROUzEe30kr"
       )
       .then(
         () => {
-          setLoading(false);
-          alert("Thank you. I will get back to you as soon as posible.");
-
-          setForm({
-            name: "",
-            email: "",
-            message: "",
-          });
+          setStatus("sent");
+          setForm({ name: "", email: "", message: "" });
         },
-        (error) => {
-          setLoading(false);
-
-          console.log(error);
-
-          alert("Something went Wrong.");
-        }
+        () => setStatus("error")
       );
   };
 
   return (
-    <div className="xl:mt-12 xl:flex-row flex-col-reverse flex gap-10 overflow-hidden">
-      <motion.div
-        variants={slideIn("left", "tween", 0.2, 1)}
-        className="flex-[0.75] bg-black-100 p-8 rounded-2xl"
-      >
-        <p className={styles.sectionSubText}>Get in touch</p>
-        <h3 className={styles.sectionHeadText}>Contact.</h3>
+    <div className="xl:flex-row flex-col-reverse flex gap-10 overflow-hidden">
+      <motion.div variants={slideIn("left", "tween", 0.2, 1)} className="flex-[0.85] card !transform-none rounded-2xl p-6 sm:p-9">
+        <SectionHeading index="06" label="contact" title="Let's talk." />
+        <p className="mt-4 text-secondary text-[16px] leading-relaxed">
+          Open to conversations about backend, platform and fintech infrastructure. Write to{" "}
+          <a href={`mailto:${profile.email}`} className="text-teal hover:underline">
+            {profile.email}
+          </a>{" "}
+          or use the form.
+        </p>
 
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className="mt-12 flex flex-col gap-8"
-        >
-          <label className="flex flex-col">
-            <span className="text-white font-medium mb-4">Your Name</span>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="What's Your Name?"
-              className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outlined-none border-none font-medium"
-            />
+        <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5">
+          <label className="flex flex-col gap-2">
+            <span className="font-mono text-[12px] text-secondary">name</span>
+            <input required type="text" name="name" value={form.name} onChange={handleChange} placeholder="Your name" className={inputClass} />
+          </label>
+          <label className="flex flex-col gap-2">
+            <span className="font-mono text-[12px] text-secondary">email</span>
+            <input required type="email" name="email" value={form.email} onChange={handleChange} placeholder="you@company.com" className={inputClass} />
+          </label>
+          <label className="flex flex-col gap-2">
+            <span className="font-mono text-[12px] text-secondary">message</span>
+            <textarea required rows="5" name="message" value={form.message} onChange={handleChange} placeholder="What are you building?" className={inputClass} />
           </label>
 
-          <label className="flex flex-col">
-            <span className="text-white font-medium mb-4">Your Email</span>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="What's Your Email?"
-              className="bg-tertiary py-4 px-6 placeholde:text-secondary text-white rounded-lg outlined-none border-none font-medium"
-            />
-          </label>
-
-          <label className="flex flex-col">
-            <span className="text-white font-medium mb-4">Your Message</span>
-            <textarea
-              rows="7"
-              name="message"
-              value={form.message}
-              onChange={handleChange}
-              placeholder="What do you want to say?"
-              className="bg-tertiary py-4 px-6 placeholde:text-secondary text-white rounded-lg outlined-none border-none font-medium"
-            />
-          </label>
-          <div className="flex justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-3">
             <button
               type="submit"
-              className="bg-tertiary py-3 px-8 outlined-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl"
+              disabled={status === "sending"}
+              className="rounded-full bg-teal text-primary font-medium px-7 py-3 hover:bg-[#5eead4] transition-colors disabled:opacity-60"
             >
-              {loading ? "Sending..." : "Send"}
+              {status === "sending" ? "Sending…" : "Send message"}
             </button>
-            <button onClick={handleDownloadPDF} 
-              className="bg-tertiary py-3 px-8 outlined-none w-fit text-white font-bold shadow-md shadow-primary rounded-xl"
-              type="button"
+            <a
+              href={resume}
+              download="Resume_Vivek_Anand.pdf"
+              className="rounded-full border border-line px-7 py-3 text-ink hover:border-teal transition-colors"
             >
-            Resume
-            </button>
+              Résumé
+            </a>
+            {status === "sent" && <span className="font-mono text-[13px] text-teal">Sent — I'll reply soon.</span>}
+            {status === "error" && <span className="font-mono text-[13px] text-amber">Couldn't send. Email me instead.</span>}
           </div>
         </form>
       </motion.div>
 
-      <motion.div
-        variants={slideIn("right", "tween", 0.2, 1)}
-        className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px]"
-      >
+      <motion.div variants={slideIn("right", "tween", 0.2, 1)} className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px]">
         <EarthCanvas />
       </motion.div>
     </div>
