@@ -145,7 +145,7 @@ export const experiences = [
     title: "SDE Intern",
     company: "basys.ai",
     date: "May 2023 — Jul 2023",
-    location: "Boston, MA",
+    location: "Remote",
     summary: "Built and maintained React web applications with a cross-functional team.",
     points: [],
   },
